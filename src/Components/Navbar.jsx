@@ -2,15 +2,20 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { CgMenu, CgClose } from "react-icons/cg";
 import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "../styles/Button";
 
 
 function Navbar(){
   const [openMenu, setOpenMenu] = useState(false);
+  const { loginWithRedirect ,logout,isAuthenticated, user} = useAuth0();
+
 
     const Nav = styled.nav`
     .navbar-list {
       display: flex;
       gap: 3.8rem;
+      align-items: center;
       
       li {
         list-style: none;
@@ -137,6 +142,19 @@ function Navbar(){
                           Contact
                           </NavLink>
                     </li>
+                    {isAuthenticated && <li><p>{user.name}</p></li>}
+                    {isAuthenticated ? (<li>
+                    <Button onClick={() => logout({ returnTo: window.location.origin })}>
+                    LogOut
+                    </Button>
+                    </li>) :
+                    
+                   ( <li>
+                    <Button onClick={() => loginWithRedirect()}>LogIn</Button>
+                    </li>)
+                    }
+                    
+                    
 
 
                 </ul>
